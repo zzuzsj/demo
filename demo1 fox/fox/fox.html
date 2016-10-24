@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #index{
+            width:400px;
+            height:400px;
+            position: absolute;
+            transform-style: preserve-3d;
+            /*animation:selfRotate 3s infinite linear;*/
+            top:80px;
+            left:40px;
+        }
+        @keyframes selfRotate {
+            from{
+                transform: rotateY(0);
+            }to{
+                 transform: rotateY(360deg);
+             }
+        }
+        .balls{
+            width:0px;
+            height:0px;
+            position: relative;
+            margin:0 auto;
+            opacity: 0.6;
+            transition: all 8s linear;
+            transform-style: preserve-3d;
+            /*animation:selfRotate 3s infinite linear;*/
+        }
+        #small_box1 {
+            background: azure;
+            transform: rotateY(0) translateZ(171px);
+        }
+        #small_box2{
+            background: aqua;
+            /*perspective: 200px;*/
+            transform: rotateY(60deg) translateZ(171px);
+        }
+        #small_box3{
+            background: lime;
+            /*perspective: 200px;*/
+            transform: rotateY(120deg) translateZ(171px);
+        }
+        #small_box4{
+
+            background: pink;
+            /*perspective: 200px;*/
+            transform: rotateY(180deg) translateZ(171px);
+        }
+        #small_box5{
+            background: fuchsia;
+            /*perspective: 200px;*/
+            transform: rotateY(240deg) translateZ(171px);
+        }
+        #small_box6{
+            background: yellow;
+            /*perspective: 200px;*/
+            transform: rotateY(300deg) translateZ(171px);
+        }
+
+        @keyframes selfRotate2 {
+            from{
+                transform: rotateX(0) rotateZ(0) rotateY(0deg);
+            }to{
+                 transform: rotateX(360deg) rotateZ(360deg) rotateY(-360deg);
+             }
+        }
+
+        #clickMe{
+            width:50px;
+            height:50px;
+            position: relative;
+            margin:0 200px;
+            transition: all 5s linear;
+            transform-style: preserve-3d;
+            animation:selfRotate2 5s infinite linear;
+        }
+        .balls2{
+            width:50px;
+            height:50px;
+            position: absolute;
+            /*margin:0 auto;*/
+            top: 0px;
+            left: 0px;
+            opacity: 0.6;
+            transition: all 5s linear;
+            font-size:30px;
+            font-height:50px;
+            text-align: center;
+        }
+
+        #face1 {
+            background: azure;
+            transform: rotateY(0) rotateX(0) translateZ(35px);
+        }
+        #face2{
+            background: aqua;
+            /*perspective: 200px;*/
+            transform: rotateY(90deg) rotateX(0) translateZ(35px);
+        }
+        #face3{
+            background: lime;
+            /*perspective: 200px;*/
+            transform: rotateY(180deg) rotateX(0) translateZ(35px);
+        }
+        #face4{
+
+            background: pink;
+            /*perspective: 200px;*/
+            transform: rotateY(270deg) rotateX(0) translateZ(35px);
+        }
+        #face5{
+            background: fuchsia;
+            /*perspective: 200px;*/
+            transform: rotateY(0deg) rotateX(90deg) translateZ(35px);
+        }
+        #face6{
+            background: yellow;
+            /*perspective: 200px;*/
+            transform: rotateY(0deg) rotateX(-90deg) translateZ(35px);
+        }
+
+        #index:hover{
+            animation-play-state: paused;
+        }
+
+        #index .balls:hover{
+            animation-play-state: paused;
+            transform: scale(1.5);
+            transition: all .5s linear;
+        }
+
+        .backBalls{
+            animation: changeBg 1.5s ease-out;
+        }
+
+        @keyframes changeBg {
+            from{
+                transform: scale(1);
+            }
+            99%{
+                transform:scale(30);
+            }
+            100%{
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <canvas id="board" width="500" height="500"></canvas>
+    <div id="index">
+        <div id="small_box1" class="balls"></div>
+        <div id="small_box2" class="balls"></div>
+        <div id="small_box3" class="balls"></div>
+        <div id="small_box4" class="balls"></div>
+        <div id="small_box5" class="balls"></div>
+        <div id="small_box6" class="balls"></div>
+    </div>
+
+    <div id="clickMe">
+        <div id="face1" class="balls2">C</div>
+        <div id="face2" class="balls2">L</div>
+        <div id="face3" class="balls2">I</div>
+        <div id="face4" class="balls2">C</div>
+        <div id="face5" class="balls2">K</div>
+        <div id="face6" class="balls2">!</div>
+    </div>
+
+    <script>
+        var board=document.getElementById('board');
+        var orz=board.getContext('2d');
+
+        var arr=[1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1,0];
+        var index=0;
+        var isPlay=false;
+        var clickMe=document.getElementById('clickMe');
+        var count=0;
+        var timeId;
+        var balls=document.getElementsByClassName('balls');
+        console.log(balls);
+
+        for(var i=0;i<balls.length;i++){
+            (function (n) {
+                balls[n].onclick=function () {
+                    var clsName=balls[n].className.indexOf('backBalls');
+                    if(clsName!=-1){
+                        balls[n].className='balls';
+                    }else {
+                        balls[n].className=balls[n].className+' backBalls';
+                    }
+                }
+            })(i)
+        }
+
+        console.log(balls[0].className);
+
+        for(var i=0;i<clickMe.length;i++){
+            clickMe[i].onclick=function () {
+                isPlay=!isPlay;
+            }
+        }
+
+        clickMe.onclick=function () {
+            isPlay=!isPlay;
+            console.log(isPlay);
+            if(isPlay){
+                timeId=setInterval(timing,20);
+            }else {
+                if(timeId){
+                    clearInterval(timeId);
+                }
+            }
+        }
+
+        board.onmouseover=function () {
+            var box=document.getElementsByClassName('balls');
+            var index=document.getElementById('index');
+            index.style.animation='selfRotate 6s infinite linear';
+            for (var i=0;i<box.length;i++){
+                box[i].style.width='50px';
+                box[i].style.height='50px';
+                box[i].style.borderRadius='50%';
+            }
+        };
+
+        function painting() {
+
+            //左耳
+            orz.save();
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.translate(181,137);
+            orz.rotate(-Math.PI/180*arr[count]/2);
+            orz.moveTo(19,-44);
+            orz.lineTo(30,0);
+            orz.lineTo(0,0);
+            orz.lineTo(19,-44);
+            orz.stroke();
+            orz.closePath();
+            orz.restore();
+
+            //右耳
+            orz.save();
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.translate(268,137);
+            orz.rotate(Math.PI/180*arr[count]/2);
+            orz.moveTo(-22,-49);
+            orz.lineTo(0,0);
+            orz.lineTo(-38,0);
+            orz.lineTo(-22,-49);
+            orz.stroke();
+            orz.closePath();
+            orz.restore();
+
+            //头
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.moveTo(181,142);
+            orz.lineTo(269,142);
+            orz.lineTo(271,149);
+            orz.lineTo(225,230);
+            orz.lineTo(179,149);
+            orz.lineTo(181,142);
+            orz.stroke();
+            orz.closePath();
+
+            //眼睛
+            orz.beginPath();
+            orz.fillStyle='black';
+            orz.arc(210,166,5,0,Math.PI*2);
+            orz.fill();
+            orz.stroke();
+            orz.closePath();
+
+            orz.beginPath();
+            orz.fillStyle='black';
+            orz.arc(240,166,5,0,Math.PI*2);
+            orz.fill();
+            orz.stroke();
+            orz.closePath();
+
+
+            //身体
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.moveTo(210,204);
+            orz.lineTo(175,260);
+            orz.lineTo(200,390);
+            orz.lineTo(250,390);
+            orz.lineTo(275,260);
+            orz.lineTo(240,204);
+            orz.stroke();
+            orz.closePath();
+
+            //领结线
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.moveTo(202,219);
+            orz.lineTo(218,247);
+            orz.stroke();
+            orz.closePath();
+
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.moveTo(248,219);
+            orz.lineTo(230,247);
+            orz.stroke();
+            orz.closePath();
+
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.fillStyle='white';
+            orz.moveTo(218,247);
+            orz.lineTo(230,247);
+            orz.lineTo(224,257);
+            orz.lineTo(218,247);
+            orz.fill();
+            orz.stroke();
+            orz.closePath();
+
+            //领结
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.fillStyle='black';
+            orz.moveTo(218,247);
+            orz.lineTo(224,257);
+            orz.lineTo(230,247);
+            orz.lineTo(240,350);
+            orz.lineTo(224,370);
+            orz.lineTo(208,350);
+            orz.lineTo(218,247);
+            orz.fill();
+            orz.stroke();
+            orz.closePath();
+
+            //尾巴
+            orz.save();
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.fillStyle='white';
+            orz.translate(261,334);
+            orz.rotate(Math.PI/180*arr[count]);
+            orz.moveTo(264-261,320-334);
+            orz.lineTo(400-261,220-334);
+            orz.lineTo(290-261,380-334);
+            orz.lineTo(261-261,334-334);
+            orz.lineTo(264-261,320-334);
+            orz.fill();
+            orz.stroke();
+            orz.closePath();
+            orz.restore();
+
+            //文字
+            orz.save();
+            orz.beginPath();
+            orz.fillStyle='red';
+            orz.font='50px Arial';
+            orz.fillText('move to here',90,50);
+            orz.stroke();
+            orz.closePath();
+            orz.restore();
+
+            index++;
+            if(index>=60){
+                index=0;
+            }
+
+        }
+
+        painting();
+
+        function timing() {
+
+            count=Math.floor(index/3);
+
+            orz.clearRect(0,0,500,500);
+
+            painting();
+        }
+
+    </script>
+</body>
+</html>

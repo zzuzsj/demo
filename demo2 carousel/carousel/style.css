@@ -1,0 +1,29 @@
+#carousel{
+    width: 1000px;
+    height: 600px;
+    margin:30px auto;
+    transform-style: preserve-3d;
+    position: relative;
+    transition: all 3s linear;
+}
+.containerPiece{
+    transform-style: preserve-3d;
+    width:50px;
+    height:600px;
+    position: absolute;
+}
+/*#carousel:hover {*/
+    /*transform: rotateX(360deg);*/
+/*}*/
+.piece{
+    width:50px;
+    height:600px;
+    opacity: 0.9;
+    /*transform: translateZ(300px);*/
+}
+.piece:hover{
+    transform: rotateX(90deg);
+}
+/*.face1_target{*/
+    /*transform: rotateX(90deg);*/
+/*}*/
