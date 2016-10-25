@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="board" width="500px" height="500px"></canvas>
+<!--小球-->
+<!--<script type="text/javascript">-->
+    <!--var canvas = document.getElementById('board');-->
+    <!--var ctx = canvas.getContext('2d');-->
+    <!--var raf;-->
+
+    <!--var ball = {-->
+        <!--x: 100,-->
+        <!--y: 100,-->
+        <!--vx: 5,-->
+        <!--vy: 2,-->
+        <!--radius: 25,-->
+        <!--color: 'blue',-->
+        <!--draw: function() {-->
+            <!--ctx.beginPath();-->
+            <!--ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);-->
+            <!--ctx.closePath();-->
+            <!--ctx.fillStyle = this.color;-->
+            <!--ctx.fill();-->
+        <!--}-->
+    <!--};-->
+
+    <!--function draw() {-->
+        <!--ctx.clearRect(0,0, canvas.width, canvas.height);-->
+        <!--ball.draw();-->
+        <!--ball.x += ball.vx;-->
+        <!--ball.y += ball.vy;-->
+        <!--raf = window.requestAnimationFrame(draw);-->
+    <!--}-->
+
+    <!--canvas.addEventListener('mouseover', function(e){-->
+        <!--raf = window.requestAnimationFrame(draw);-->
+    <!--});-->
+
+    <!--canvas.addEventListener("mouseout",function(e){-->
+        <!--window.cancelAnimationFrame(raf);-->
+    <!--});-->
+
+    <!--ball.draw();-->
+<!--</script>-->
+<!--折线图-->
+<script type="text/javascript">
+    var board=document.getElementById('board');
+    var orz=board.getContext('2d');
+    var arr=[60,90,150,130,170,190,125,175,155,165,155,145];
+
+    var index=0;
+
+    var my_gradient=orz.createLinearGradient(0,100,0,400);
+    my_gradient.addColorStop(0,'red');
+    my_gradient.addColorStop(1,'blue');
+
+    function time() {
+
+        index++;
+        if (index>=60){
+            index=60;
+        }
+
+        orz.fillStyle='rgba(255,255,255,0.2)';
+
+        orz.fillRect(0,0,500,500);
+
+        orz.save();
+
+
+        orz.beginPath();
+        orz.strokeStyle='black';
+        orz.moveTo(100,50);
+        orz.lineTo(100,450);
+        orz.stroke();
+        orz.closePath();
+
+        orz.beginPath();
+        orz.strokeStyle='black';
+        orz.moveTo(500,50);
+        orz.lineTo(500,450);
+        orz.stroke();
+        orz.closePath();
+
+        for(var i=0;i<=10;i++){
+            orz.beginPath();
+            orz.strokeStyle='black';
+            orz.moveTo(100,50+i*40);
+            orz.lineTo(500,50+i*40);
+            orz.stroke();
+            orz.fillStyle='black';
+            orz.fillText(200-i*20,80,50+i*40);
+            orz.closePath();
+        }
+
+
+        for(var i=0;i<arr.length;i++){
+            if(index>=60){
+                orz.save();
+                orz.beginPath();
+                if(i==0){
+                    orz.moveTo(100,450);
+                }else {
+                    orz.moveTo(110+(i-1)*32,50+2*(200-arr[i-1]))
+                }
+//            orz.fillStyle=my_gradient;
+                orz.strokeStyle='blue';
+                orz.lineTo(110+i*32,50+2*(200-arr[i]));
+                orz.stroke();
+
+
+//            orz.fillRect(110+i*32,50+2*(200-index/60*arr[i]),24,index/60*arr[i]*2);
+                orz.fillStyle='black';
+//            orz.fillText(Math.ceil(index/60*arr[i]),114+i*32,48+2*(200-index/60*arr[i]));
+                orz.fillText((i+1)+'月',111+i*32,465);
+                orz.closePath();
+                orz.restore();
+                if(index>120)
+                {
+                    clearInterval(timeId);
+                }
+             }
+
+
+            orz.beginPath();
+            orz.strokeStyle='red';
+            orz.arc(index/60*(110+i*32),index/60*(50+2*(200-arr[i])),5,0,index/60*2*Math.PI);
+            orz.stroke();
+            orz.closePath();
+        }
+
+        orz.restore();
+    }
+
+    var timeId=setInterval(time,50);
+
+</script>
+</body>
+</html>

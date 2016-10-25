@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <canvas id="board" width="500px" height="500px"></canvas>
+
+</head>
+<body>
+<script type="text/javascript">
+var board=document.getElementById('board');
+var orz=board.getContext('2d');
+var arr=[60,90,150,130,170,190,125,175,155,165,155,145];
+
+var index=0;
+
+var my_gradient=orz.createLinearGradient(0,100,0,400);
+my_gradient.addColorStop(0,'red');
+my_gradient.addColorStop(1,'blue');
+
+function time() {
+
+index++;
+if (index>=60){
+clearInterval(timeId);
+}
+
+orz.clearRect(0,0,500,500);
+
+orz.save();
+
+
+orz.beginPath();
+orz.strokeStyle='black';
+orz.moveTo(100,50);
+orz.lineTo(100,450);
+orz.stroke();
+orz.closePath();
+
+orz.beginPath();
+orz.strokeStyle='black';
+orz.moveTo(500,50);
+orz.lineTo(500,450);
+orz.stroke();
+orz.closePath();
+
+for(var i=0;i<=10;i++){
+orz.beginPath();
+orz.strokeStyle='black';
+orz.moveTo(100,50+i*40);
+orz.lineTo(500,50+i*40);
+orz.stroke();
+orz.fillStyle='black';
+orz.fillText(200-i*20,80,50+i*40);
+orz.closePath();
+}
+
+
+for(var i=0;i<arr.length;i++){
+orz.beginPath();
+orz.fillStyle=my_gradient;
+orz.fillRect(110+i*32,50+2*(200-index/60*arr[i]),24,index/60*arr[i]*2);
+orz.fillStyle='black';
+orz.fillText(Math.ceil(index/60*arr[i]),114+i*32,48+2*(200-index/60*arr[i]));
+orz.fillText((i+1)+'月',111+i*32,465);
+orz.closePath();
+}
+
+orz.restore();
+}
+
+var timeId=setInterval(time,50);
+
+</script>
+</body>
+</html>
