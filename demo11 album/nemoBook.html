@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="xmlToJson.js"></script>
+    <script src="img.js"></script>
+    <style>
+        canvas{
+            width:100%;
+            height:auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+<script>
+    var book1Data=zsj.xmlToJson('Nemobook.xml');
+    var canvas=document.getElementById('canvas');
+    var context=canvas.getContext('2d');
+    canvas.width=book1Data[0].width;
+    canvas.height=book1Data[0].height;
+    canvas.style.position='absolute';
+    canvas.style.top='0';
+    canvas.style.left='0';
+    var index=0;
+    var pages=0;
+    var imgArray=[];
+    console.log(book1Data);
+
+    for (var m=0;m<book1Data.length;m++){
+        for (var n=0;n<book1Data[m].item.length;n++){
+            var x=book1Data[m].item[n].x;
+            var y=book1Data[m].item[n].y;
+            var height=book1Data[m].item[n].height;
+            var width=book1Data[m].item[n].width;
+            var url=book1Data[m].item[n].file;
+            var startIndex=m*800+n*60;
+            var imgElement=new zsj.createImg(url,x,y,width,height,startIndex);
+            imgArray.push(imgElement);
+        }
+    }
+
+    console.log(imgArray);
+
+    function render() {
+
+        index++;
+        if (index>book1Data.length*800){
+            index=0;
+        }
+        if (index%800<=750){
+            context.clearRect(0,0,canvas.width,canvas.height);
+        }else if(index%800>750&&index%800<=799){
+            context.fillStyle='rgba(255,255,255,0.2)';
+            context.fillRect(0,0,canvas.width,canvas.height);
+        }
+
+        for(var i=0;i<imgArray.length;i++){
+            imgArray[i].drawImg(context,index);
+
+        }
+        console.log(index);
+        requestAnimationFrame(render);
+    }
+//
+    function init() {
+        render();
+    }
+
+    init();
+
+    canvas.addEventListener('click',function (e) {
+        if (e.layerX<canvas.width/2){
+            index=index-800;
+            if(index<0){
+                index=pages*800+index;
+            }
+        }else if(e.layerX>canvas.width/2){
+            index=index+600;
+            if (index>pages*800){
+                index=index-pages*800;
+            }
+        }
+    });
+</script>
+</html>

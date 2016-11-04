@@ -1,0 +1,12 @@
+*.mp3
+*.mp4
+*.zip
+*.7z
+*.gz
+*.rar
+*.tar
+*.img
+node_modules/
+*.png
+*.svg
+jquery/
